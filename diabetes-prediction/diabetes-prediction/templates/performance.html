@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Model Performance — GlucoSense{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 48px;">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Evaluation</div>
+      <h2>How each model performed on the held-out test set</h2>
+      <p>Metrics below come from a stratified 80/20 train-test split (20% held out, never seen during training).</p>
+    </div>
+
+    {% if metrics %}
+    <div class="card" style="padding: 8px 8px; overflow-x: auto; margin-bottom: 32px;">
+      <table class="metric-table">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Accuracy</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1-score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for name, m in metrics.all_models.items() %}
+          <tr class="{{ 'is-best' if name == metrics.best_model else '' }}">
+            <td>{{ name }}{% if name == metrics.best_model %}<span class="chip-best">Deployed</span>{% endif %}</td>
+            <td>{{ (m.accuracy * 100) | round(2) }}%</td>
+            <td>{{ (m.precision * 100) | round(2) }}%</td>
+            <td>{{ (m.recall * 100) | round(2) }}%</td>
+            <td>{{ (m.f1_score * 100) | round(2) }}%</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-2">
+      <div class="card chart-card">
+        <h3>Confusion matrix — {{ metrics.best_model }}</h3>
+        <img src="{{ url_for('static', filename='confusion_matrix.png') }}" alt="Confusion matrix for the best model">
+      </div>
+      <div class="card chart-card">
+        <h3>Model comparison</h3>
+        <img src="{{ url_for('static', filename='model_comparison.png') }}" alt="Bar chart comparing accuracy, precision, recall and F1 across all models">
+      </div>
+    </div>
+
+    <div class="card" style="padding: 28px; margin-top: 32px;">
+      <h3 style="font-size: 1.05rem;">Reading the metrics</h3>
+      <p style="margin-bottom: 10px;"><strong>Accuracy</strong> — overall share of correct predictions across both classes.</p>
+      <p style="margin-bottom: 10px;"><strong>Precision</strong> — of everyone predicted diabetic, how many actually were.</p>
+      <p style="margin-bottom: 10px;"><strong>Recall</strong> — of everyone who was actually diabetic, how many the model caught.</p>
+      <p style="margin-bottom: 0;"><strong>F1-score</strong> — the harmonic mean of precision and recall, used here to pick the deployed model.</p>
+    </div>
+
+    {% else %}
+    <div class="card" style="padding: 32px; text-align:center;">
+      <h3>No metrics found yet</h3>
+      <p style="margin-bottom: 18px;">Run the training script to generate model performance data.</p>
+      <code style="font-family: var(--font-mono); background: var(--surface-raised); padding: 8px 12px; border-radius: 6px;">python notebooks/train_model.py</code>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

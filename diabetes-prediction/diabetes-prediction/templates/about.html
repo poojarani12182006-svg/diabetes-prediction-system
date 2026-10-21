@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}About the Project — GlucoSense{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 56px;">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">About the project</div>
+      <h2>How GlucoSense goes from raw data to a live prediction</h2>
+      <p>
+        This is an end-to-end applied machine learning project: a public medical
+        dataset, a preprocessing and model-comparison pipeline, and a Flask web
+        application that serves the trained model.
+      </p>
+    </div>
+
+    <div class="card" style="padding: 8px 32px;">
+      <ul class="pipeline-list">
+        <li>
+          <h4>Data collection</h4>
+          <p>The Pima Indians Diabetes Dataset — 768 records of female patients of Pima Indian heritage, aged 21+, with 8 diagnostic measurements and a binary outcome.</p>
+        </li>
+        <li>
+          <h4>Data cleaning</h4>
+          <p>Physiologically impossible zero-values in Glucose, Blood Pressure, Skin Thickness, Insulin, and BMI are treated as missing and replaced with the column median.</p>
+        </li>
+        <li>
+          <h4>Train / test split &amp; scaling</h4>
+          <p>An 80/20 stratified split preserves the class balance. Features are standardized with scikit-learn's StandardScaler before training.</p>
+        </li>
+        <li>
+          <h4>Model training &amp; comparison</h4>
+          <p>Logistic Regression, Decision Tree, and Random Forest classifiers are trained on the same data and evaluated on accuracy, precision, recall, and F1-score.</p>
+        </li>
+        <li>
+          <h4>Model selection</h4>
+          <p>The model with the highest F1-score is chosen automatically — F1 balances false positives and false negatives, which matters for a health-related prediction.</p>
+        </li>
+        <li>
+          <h4>Serialization</h4>
+          <p>The winning model and the fitted scaler are saved with Joblib so the exact training-time preprocessing is reused at prediction time.</p>
+        </li>
+        <li>
+          <h4>Web deployment</h4>
+          <p>A Flask backend loads the saved model and scaler once at startup, validates incoming form data, and returns a prediction with a confidence score.</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section section-tight">
+  <div class="container">
+    <div class="grid-2">
+      <div class="card" style="padding: 28px;">
+        <h3 style="font-size:1.1rem;">Tech stack</h3>
+        <div class="tech-tags">
+          <span>Python</span>
+          <span>Pandas</span>
+          <span>NumPy</span>
+          <span>Scikit-learn</span>
+          <span>Matplotlib</span>
+          <span>Flask</span>
+          <span>Joblib</span>
+          <span>HTML / CSS / JS</span>
+        </div>
+      </div>
+      <div class="card" style="padding: 28px;">
+        <h3 style="font-size:1.1rem;">Dataset details</h3>
+        <p style="margin-bottom: 8px;"><strong>Source:</strong> National Institute of Diabetes and Digestive and Kidney Diseases</p>
+        <p style="margin-bottom: 8px;"><strong>Records:</strong> 768 patients</p>
+        <p style="margin-bottom: 0;"><strong>Target:</strong> Outcome (1 = diabetic, 0 = not diabetic)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-tight">
+  <div class="container">
+    <div class="card" style="padding: 28px; border-left: 3px solid var(--alert);">
+      <h3 style="font-size:1.05rem; color: var(--alert);">Important limitations</h3>
+      <p style="margin-bottom:0;">
+        This model is trained on a specific population (adult women of Pima Indian
+        heritage) and a relatively small dataset. It is built for educational
+        purposes to demonstrate a full ML + web deployment workflow, and its
+        predictions should never be used for real medical decisions.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

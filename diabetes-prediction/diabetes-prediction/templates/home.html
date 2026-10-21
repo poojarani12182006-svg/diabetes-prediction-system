@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}GlucoSense — Diabetes Risk Prediction{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow">Machine Learning · Pima Indians Diabetes Dataset</div>
+      <h1>Estimate diabetes risk from eight <span class="accent">clinical readings</span>.</h1>
+      <p class="hero-lede">
+        GlucoSense compares Logistic Regression, Decision Tree, and Random Forest
+        classifiers, then serves the best-performing model through a simple web
+        form — enter your measurements, and get an instant, explainable prediction.
+      </p>
+      <div class="hero-actions">
+        <a href="{{ url_for('predict') }}" class="btn btn-primary">Run a prediction</a>
+        <a href="{{ url_for('performance') }}" class="btn btn-ghost">View model performance</a>
+      </div>
+    </div>
+
+    <div class="vitals-panel">
+      <div class="vitals-panel-head"><span class="vitals-dot"></span>Sample input vector</div>
+      <div class="vitals-row"><span class="v-label">Pregnancies</span><span class="v-value">2</span></div>
+      <div class="vitals-row"><span class="v-label">Glucose (mg/dL)</span><span class="v-value">130</span></div>
+      <div class="vitals-row"><span class="v-label">Blood Pressure (mmHg)</span><span class="v-value">78</span></div>
+      <div class="vitals-row"><span class="v-label">Skin Thickness (mm)</span><span class="v-value">24</span></div>
+      <div class="vitals-row"><span class="v-label">Insulin (mu U/mL)</span><span class="v-value">96</span></div>
+      <div class="vitals-row"><span class="v-label">BMI</span><span class="v-value">31.4</span></div>
+      <div class="vitals-row"><span class="v-label">Pedigree Function</span><span class="v-value">0.42</span></div>
+      <div class="vitals-row"><span class="v-label">Age</span><span class="v-value">34</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Why these numbers</div>
+      <h2>Every field maps to a real clinical measurement</h2>
+      <p>The model was trained on 768 patient records. Each input below directly affects the prediction — no black-box guessing.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card feature-card">
+        <div class="f-index">01</div>
+        <h3>Consistent preprocessing</h3>
+        <p>Impossible zero-values (e.g. 0 blood pressure) are treated as missing data and imputed with the column median, exactly as during training.</p>
+      </div>
+      <div class="card feature-card">
+        <div class="f-index">02</div>
+        <h3>Model comparison, not guesswork</h3>
+        <p>Three classifiers are trained side-by-side and scored on accuracy, precision, recall, and F1 — the strongest one is deployed automatically.</p>
+      </div>
+      <div class="card feature-card">
+        <div class="f-index">03</div>
+        <h3>Confidence, not just a label</h3>
+        <p>Every prediction returns a probability score, so you can see how strongly the model leans toward its answer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-tight">
+  <div class="container">
+    <div class="grid-3">
+      <div class="card stat-card">
+        <div class="stat-num">768</div>
+        <div class="stat-label">Patient records</div>
+        <p>Sourced from the Pima Indians Diabetes Dataset (UCI / NIDDK).</p>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-num">8</div>
+        <div class="stat-label">Input features</div>
+        <p>Pregnancies, glucose, blood pressure, skin thickness, insulin, BMI, pedigree, age.</p>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Models compared</div>
+        <p>Logistic Regression, Decision Tree, and Random Forest — best one wins.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-tight">
+  <div class="container">
+    <div class="card" style="padding: 32px; display:flex; align-items:center; justify-content:space-between; gap: 24px; flex-wrap: wrap;">
+      <div>
+        <h3 style="margin-bottom:6px;">Ready to try it?</h3>
+        <p style="margin-bottom:0;">Enter your measurements and get a prediction in seconds.</p>
+      </div>
+      <a href="{{ url_for('predict') }}" class="btn btn-primary">Go to prediction form</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

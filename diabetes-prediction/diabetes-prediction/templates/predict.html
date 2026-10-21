@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Prediction — GlucoSense{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 48px;">
+  <div class="container">
+    <div class="section-head" style="margin-bottom: 28px;">
+      <div class="eyebrow">Prediction console</div>
+      <h2>Enter your clinical measurements</h2>
+      <p>All eight fields are required. Values are validated before the form is submitted.</p>
+    </div>
+
+    <div class="predict-layout">
+      <!-- ============================= FORM ============================= -->
+      <div class="card form-card">
+        <h2>Patient measurements</h2>
+        <p class="form-sub">Figures should reflect a single clinical reading.</p>
+
+        {% if errors %}
+        <div class="form-errors">
+          <strong>Please fix the following before continuing:</strong>
+          <ul>
+            {% for err in errors %}
+            <li>{{ err }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        <form id="predictForm" method="POST" action="{{ url_for('predict') }}" novalidate>
+          <div class="field-grid">
+            <div class="field">
+              <label for="Pregnancies">Pregnancies</label>
+              <input type="number" step="1" min="0" max="20" id="Pregnancies" name="Pregnancies"
+                     value="{{ submitted_values.get('Pregnancies', '') }}" placeholder="e.g. 2" required>
+              <span class="hint">Number of times pregnant (0–20)</span>
+            </div>
+
+            <div class="field">
+              <label for="Glucose">Glucose (mg/dL)</label>
+              <input type="number" step="0.1" min="0" max="300" id="Glucose" name="Glucose"
+                     value="{{ submitted_values.get('Glucose', '') }}" placeholder="e.g. 120" required>
+              <span class="hint">Plasma glucose, 2-hr oral test</span>
+            </div>
+
+            <div class="field">
+              <label for="BloodPressure">Blood Pressure (mmHg)</label>
+              <input type="number" step="0.1" min="0" max="200" id="BloodPressure" name="BloodPressure"
+                     value="{{ submitted_values.get('BloodPressure', '') }}" placeholder="e.g. 72" required>
+              <span class="hint">Diastolic blood pressure</span>
+            </div>
+
+            <div class="field">
+              <label for="SkinThickness">Skin Thickness (mm)</label>
+              <input type="number" step="0.1" min="0" max="100" id="SkinThickness" name="SkinThickness"
+                     value="{{ submitted_values.get('SkinThickness', '') }}" placeholder="e.g. 23" required>
+              <span class="hint">Triceps skinfold thickness</span>
+            </div>
+
+            <div class="field">
+              <label for="Insulin">Insulin (mu U/mL)</label>
+              <input type="number" step="0.1" min="0" max="900" id="Insulin" name="Insulin"
+                     value="{{ submitted_values.get('Insulin', '') }}" placeholder="e.g. 80" required>
+              <span class="hint">2-hour serum insulin</span>
+            </div>
+
+            <div class="field">
+              <label for="BMI">BMI</label>
+              <input type="number" step="0.1" min="0" max="80" id="BMI" name="BMI"
+                     value="{{ submitted_values.get('BMI', '') }}" placeholder="e.g. 28.5" required>
+              <span class="hint">Weight (kg) / height² (m²)</span>
+            </div>
+
+            <div class="field">
+              <label for="DiabetesPedigreeFunction">Diabetes Pedigree Function</label>
+              <input type="number" step="0.001" min="0" max="3" id="DiabetesPedigreeFunction" name="DiabetesPedigreeFunction"
+                     value="{{ submitted_values.get('DiabetesPedigreeFunction', '') }}" placeholder="e.g. 0.42" required>
+              <span class="hint">Family history score</span>
+            </div>
+
+            <div class="field">
+              <label for="Age">Age (years)</label>
+              <input type="number" step="1" min="1" max="120" id="Age" name="Age"
+                     value="{{ submitted_values.get('Age', '') }}" placeholder="e.g. 34" required>
+              <span class="hint">Age in years</span>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="submitBtn">Run prediction</button>
+            <div id="loadingIndicator"><span class="spinner"></span> Analyzing measurements…</div>
+          </div>
+
+          <p class="disclaimer-note">
+            GlucoSense is an educational machine learning tool. It does not
+            provide a medical diagnosis. Always consult a qualified healthcare
+            professional for medical advice.
+          </p>
+        </form>
+      </div>
+
+      <!-- ============================= RESULT ============================ -->
+      {% if result %}
+      <div class="card result-card">
+        <span class="result-status {{ 'risk' if result.is_diabetic else 'safe' }}">
+          {{ '⚠ Elevated risk pattern' if result.is_diabetic else '✓ Low risk pattern' }}
+        </span>
+
+        <div class="gauge-wrap">
+          <div id="confidenceGauge" data-confidence="{{ result.confidence }}" data-risk="{{ 'true' if result.is_diabetic else 'false' }}"></div>
+          <div class="gauge-value" style="color: {{ 'var(--alert)' if result.is_diabetic else 'var(--primary)' }};">{{ result.confidence }}%</div>
+          <div class="gauge-caption">Model confidence</div>
+        </div>
+
+        <h3 class="result-verdict">Prediction: {{ result.prediction }}</h3>
+        <p class="result-sub">Based on the eight measurements you submitted.</p>
+
+        <div class="result-disclaimer">
+          <strong>Educational result only.</strong> This prediction comes from a
+          machine learning model trained on a limited dataset. It is not a
+          medical diagnosis — please consult a healthcare professional.
+        </div>
+
+        <div class="result-inputs">
+          <div class="ri-title">Submitted values</div>
+          <div class="result-inputs-grid">
+            <div><span class="k">Pregnancies</span><span class="v">{{ submitted_values.Pregnancies }}</span></div>
+            <div><span class="k">Glucose</span><span class="v">{{ submitted_values.Glucose }}</span></div>
+            <div><span class="k">BP</span><span class="v">{{ submitted_values.BloodPressure }}</span></div>
+            <div><span class="k">Skin</span><span class="v">{{ submitted_values.SkinThickness }}</span></div>
+            <div><span class="k">Insulin</span><span class="v">{{ submitted_values.Insulin }}</span></div>
+            <div><span class="k">BMI</span><span class="v">{{ submitted_values.BMI }}</span></div>
+            <div><span class="k">Pedigree</span><span class="v">{{ submitted_values.DiabetesPedigreeFunction }}</span></div>
+            <div><span class="k">Age</span><span class="v">{{ submitted_values.Age }}</span></div>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="card result-card empty">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C12 2 5 11 5 16.5C5 20.6 8.1 24 12 24C15.9 24 19 20.6 19 16.5C19 11 12 2 12 2Z" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        <p style="margin-bottom:0;">Submit the form to see your prediction, confidence score, and a readout of the values used.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

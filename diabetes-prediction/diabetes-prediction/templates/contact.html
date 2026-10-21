@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Contact — GlucoSense{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 56px;">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Get in touch</div>
+      <h2>Questions, feedback, or collaboration ideas?</h2>
+      <p>This project was built as a college AIML assignment. Feel free to reach out or fork the repository.</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="card contact-card">
+        <div class="c-label">Email</div>
+        <div class="c-value">your.email@example.com</div>
+      </div>
+      <div class="card contact-card">
+        <div class="c-label">GitHub</div>
+        <div class="c-value">github.com/your-username/diabetes-prediction</div>
+      </div>
+      <div class="card contact-card">
+        <div class="c-label">Institution</div>
+        <div class="c-value">Your College / University Name</div>
+      </div>
+      <div class="card contact-card">
+        <div class="c-label">Project type</div>
+        <div class="c-value">AIML Academic Project</div>
+      </div>
+    </div>
+
+    <div class="card" style="padding: 28px; margin-top: 24px;">
+      <h3 style="font-size: 1.05rem;">Dataset acknowledgment</h3>
+      <p style="margin-bottom: 0;">
+        This project uses the Pima Indians Diabetes Dataset, originally from the
+        National Institute of Diabetes and Digestive and Kidney Diseases, made
+        available for machine learning research and education.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}GlucoSense — Diabetes Risk Prediction{% endblock %}</title>
+<meta name="description" content="An educational machine learning system that estimates diabetes risk from clinical measurements.">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ibm-plex/6.4.1/css/ibm-plex.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="skip-instrument" aria-hidden="true"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="{{ url_for('home') }}">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 2 C13 2 6 11 6 16.5 C6 20.6 9.1 24 13 24 C16.9 24 20 20.6 20 16.5 C20 11 13 2 13 2 Z" stroke="currentColor" stroke-width="1.6" fill="none"/>
+          <path d="M9 16 L11.2 16 L12.4 13 L13.8 19 L15 16 L17 16" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="brand-word">GlucoSense</span>
+    </a>
+
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="primary-nav" id="primaryNav">
+      <a href="{{ url_for('home') }}" class="{{ 'is-active' if active_page == 'home' else '' }}">Home</a>
+      <a href="{{ url_for('about') }}" class="{{ 'is-active' if active_page == 'about' else '' }}">About the Project</a>
+      <a href="{{ url_for('predict') }}" class="{{ 'is-active' if active_page == 'predict' else '' }}">Prediction</a>
+      <a href="{{ url_for('performance') }}" class="{{ 'is-active' if active_page == 'performance' else '' }}">Model Performance</a>
+      <a href="{{ url_for('contact') }}" class="{{ 'is-active' if active_page == 'contact' else '' }}">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="brand-mark small" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 2 C13 2 6 11 6 16.5 C6 20.6 9.1 24 13 24 C16.9 24 20 20.6 20 16.5 C20 11 13 2 13 2 Z" stroke="currentColor" stroke-width="1.6" fill="none"/>
+        </svg>
+      </span>
+      GlucoSense
+    </div>
+    <p class="footer-disclaimer">
+      Educational machine learning project trained on the Pima Indians Diabetes Dataset.
+      Not a certified medical device and not a substitute for professional diagnosis.
+    </p>
+    <p class="footer-meta">Built with Python, scikit-learn &amp; Flask · College AIML Project</p>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
